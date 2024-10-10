@@ -1,13 +1,11 @@
 // Importing necessary components and utilities
 import "@/src/styles/globals.css";
+import { fontSans } from "@/src/config/font";
 
 import { Navbar } from "@/src/components/Navbar/navbar";
 import { Providers } from "@/src/context/Provider/Provider";
 import { Metadata, Viewport } from "next";
-import {
-  Roboto as FontSans,
-  Montserrat as FontHeading,
-} from "next/font/google";
+
 import clsx from "clsx";
 import CommonLayout from "@/src/app/(WithCommonLayout)/layout";
 
@@ -22,19 +20,6 @@ export const metadata: Metadata = {
     icon: "../assets/favicons/favicon-32x32.png",
   },
 };
-
-// Setting up fonts
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "700"],
-});
-
-export const fontHeading = FontHeading({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  weight: ["400", "700"],
-});
 
 // Defining viewport settings
 export const viewport: Viewport = {
