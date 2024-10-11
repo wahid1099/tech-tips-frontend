@@ -17,12 +17,20 @@ export const NavbarItems = {
   ],
   navMenuItems: [
     {
-      label: "Profile",
-      href: "/profile",
+      label: "News Feed",
+      href: "/",
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Contact Us",
+      href: "/contact",
+    },
+    {
+      label: "About Us",
+      href: "/about",
+    },
+    {
+      label: "Profile",
+      href: "/profile",
     },
     {
       label: "Logout",

@@ -48,7 +48,7 @@ export const Navbar = () => {
 
   return (
     <NextUINavbar
-      className="shadow-lg light:bg-[#F9F9F9] dark:bg-[#1A1A1A]"
+      className="shadow-lg light:bg-[#F9F9F9] dark:bg-gray-900"
       maxWidth="2xl"
       position="sticky"
     >
@@ -99,14 +99,33 @@ export const Navbar = () => {
           <NavbarItem className="hidden md:flex">
             <Dropdown>
               <DropdownTrigger>
-                <Avatar className="cursor-pointer" src={user?.profileImage} />
+                <div className="flex items-center cursor-pointer">
+                  <Avatar src={user?.profileImage} size="sm" />
+                  <span className="ml-2 mr-2">{user?.userName}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    />
+                  </svg>
+                </div>
               </DropdownTrigger>
               <DropdownMenu aria-label="Example with disabled actions">
                 <DropdownItem
                   key="dashboard"
-                  onClick={() => handleNavigation(`/${user?.role}Dashboard`)}
+                  onClick={() =>
+                    handleNavigation(
+                      user?.role === "admin" ? "/admin" : "/profile"
+                    )
+                  }
                 >
-                  Dashboard
+                  {user?.role === "admin" ? "Admin Dashboard" : "Profile"}
                 </DropdownItem>
 
                 <DropdownItem key="logout" onClick={handleLogOut}>
@@ -141,7 +160,7 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}

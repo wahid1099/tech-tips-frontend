@@ -1,20 +1,32 @@
 import axios from "axios";
-import { cookies } from "next/headers";
-
+import { cookies } from "next/headers"; // Server-side
 import { envConfig } from "@/src/config/index";
 import { getNewAccessToken } from "@/src/services/UserServices/AuthServices";
 
+// Create Axios instance
 const axiosInstance = axios.create({
   baseURL: envConfig.baseApi,
 });
 
+// Function to get token depending on environment
+const getAccessToken = () => {
+  if (typeof window !== "undefined") {
+    // Client-side
+    return localStorage.getItem("accessToken");
+  } else {
+    // Server-side (Next.js API routes, server components)
+    const cookieStore = cookies();
+    return cookieStore.get("accessToken")?.value;
+  }
+};
+
+// Request interceptor
 axiosInstance.interceptors.request.use(
   function (config) {
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
+    const accessToken = getAccessToken();
 
     if (accessToken) {
-      config.headers.Authorization = accessToken;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;
@@ -24,6 +36,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+// Response interceptor for handling token expiration
 axiosInstance.interceptors.response.use(
   function (response) {
     return response;
@@ -37,12 +50,21 @@ axiosInstance.interceptors.response.use(
         const res = await getNewAccessToken();
         const accessToken = res.data.accessToken;
 
-        config.headers["Authorization"] = accessToken;
-        cookies().set("accessToken", accessToken);
+        // Store the new token depending on environment
+        if (typeof window !== "undefined") {
+          localStorage.setItem("accessToken", accessToken);
+        } else {
+          cookies().set("accessToken", accessToken);
+        }
+
+        // Update the request with the new token
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
 
         return axiosInstance(config);
       } catch (refreshError: any) {
-        throw new Error(refreshError.response.data.message || "Failed ");
+        throw new Error(
+          refreshError.response?.data?.message || "Failed to refresh token"
+        );
       }
     }
 

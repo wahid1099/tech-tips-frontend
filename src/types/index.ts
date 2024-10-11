@@ -1,4 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, SVGProps } from "react";
+
+export type TconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+};
 
 export interface User {
   name: string;
@@ -88,4 +92,27 @@ export interface TInput {
   label?: ReactNode;
   name: string;
   disabled?: boolean;
+}
+
+export interface TCreatePost {
+  title: string;
+  description: string;
+  contents: string;
+  thumbnailImage: string;
+  category: string;
+  tags: string[];
+  pdfVersion?: string;
+  isPremium: boolean;
+  author: string;
+}
+export interface TUpdatePost {
+  title?: string;
+  description?: string;
+  content?: string;
+  thumbnail?: string;
+  category?: string;
+  tags?: string[];
+  pdfVersion?: string;
+  isPremium?: boolean;
+  author?: string;
 }

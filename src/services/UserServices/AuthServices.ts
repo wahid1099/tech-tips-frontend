@@ -42,7 +42,11 @@ export const getCurrentUser = async () => {
 
   if (accessToken) {
     try {
-      const { data } = await axiosInstance.get("/user/get-me");
+      const { data } = await axiosInstance.get("/user/get-me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (data.success) {
         return data.data;
@@ -56,28 +60,6 @@ export const getCurrentUser = async () => {
 
   return null;
 };
-
-// export const getCurrentUser = async () => {
-//   const accessToken = cookies().get("accessToken")?.value;
-//   console.log(accessToken);
-
-//   let decodedToken = null;
-
-//   if (accessToken) {
-//     decodedToken = await jwtDecode(accessToken);
-
-//     return {
-//       // _id: decodedToken._id,
-//       name: decodedToken.name,
-//       email: decodedToken.email,
-
-//       role: decodedToken.role,
-//       profileImage: decodedToken.profileImage,
-//     };
-//   }
-
-//   return decodedToken;
-// };
 
 export const getNewAccessToken = async () => {
   try {

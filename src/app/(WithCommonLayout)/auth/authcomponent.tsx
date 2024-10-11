@@ -1,17 +1,13 @@
 "use client";
 
 import React, { ChangeEvent, useState, useEffect } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import "./auth.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { IoMdLogIn } from "react-icons/io";
-import { CiMail, CiUser } from "react-icons/ci";
-import { TbPasswordUser } from "react-icons/tb";
-import { FiUpload } from "react-icons/fi";
+
 import CustomForm from "@/src/components/Form/CustomForm";
 import { CustomInput } from "@/src/components/Form/CustomInput";
 import TechSelect from "@/src/components/Form/TechSelect";
@@ -22,7 +18,16 @@ import Loading from "@/src/components/Loading/Loading";
 import { useUser } from "@/src/context/UserContext";
 import uploadImageToCloudinary from "@/src/utils/uploadImage";
 import { loginValidationSchema } from "@/src/schema/user.schema";
-
+import {
+  EmailIcon,
+  PasswordIcon,
+  UploadIcon,
+  LocationIcon,
+  UserIcon,
+  EyeInvisibleIcon,
+  EyeVisibleIcon,
+  LogInIcon,
+} from "@/src/components/icons";
 const AuthTabs = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -113,7 +118,7 @@ const AuthTabs = () => {
             <Card className="p-4">
               <CardHeader className="text-xl font-semibold text-center">
                 <div className="flex items-center space-x-2">
-                  <IoMdLogIn />
+                  <LogInIcon />
                   <span>Login</span>
                 </div>
               </CardHeader>
@@ -133,7 +138,10 @@ const AuthTabs = () => {
                       type="email"
                       variant="bordered"
                       startContent={
-                        <CiMail className="text-2xl text-default-400" />
+                        <EmailIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                       }
                     />
                   </div>
@@ -147,9 +155,9 @@ const AuthTabs = () => {
                           onClick={toggleVisibility}
                         >
                           {isVisible ? (
-                            <AiFillEyeInvisible className="text-2xl text-default-400 pointer-events-none" />
+                            <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
                           ) : (
-                            <AiFillEye className="text-2xl text-default-400 pointer-events-none" />
+                            <EyeVisibleIcon className="text-2xl text-default-400 pointer-events-none" />
                           )}
                         </button>
                       }
@@ -160,7 +168,10 @@ const AuthTabs = () => {
                       type={isVisible ? "text" : "password"}
                       variant="bordered"
                       startContent={
-                        <TbPasswordUser className="text-2xl text-default-400" />
+                        <PasswordIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                       }
                     />
                   </div>
@@ -193,7 +204,10 @@ const AuthTabs = () => {
                       variant="bordered"
                       radius="none"
                       startContent={
-                        <CiUser className="text-2xl text-default-400" />
+                        <UserIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                       }
                     />
                     <CustomInput
@@ -204,7 +218,10 @@ const AuthTabs = () => {
                       variant="bordered"
                       radius="none"
                       startContent={
-                        <CiMail className="text-2xl text-default-400" />
+                        <EmailIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                       }
                     />
                   </div>
@@ -219,9 +236,9 @@ const AuthTabs = () => {
                           onClick={toggleVisibility}
                         >
                           {isVisible ? (
-                            <AiFillEyeInvisible className="text-2xl text-default-400 pointer-events-none" />
+                            <EyeInvisibleIcon className="text-2xl text-default-400 pointer-events-none" />
                           ) : (
-                            <AiFillEye className="text-2xl text-default-400 pointer-events-none" />
+                            <EyeVisibleIcon className="text-2xl text-default-400 pointer-events-none" />
                           )}
                         </button>
                       }
@@ -231,7 +248,10 @@ const AuthTabs = () => {
                       size="md"
                       variant="bordered"
                       startContent={
-                        <TbPasswordUser className="text-2xl text-default-400" />
+                        <PasswordIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                       }
                     />
                     <TechSelect
@@ -254,27 +274,32 @@ const AuthTabs = () => {
                       name="address"
                       size="md"
                       variant="bordered"
+                      startContent={
+                        <LocationIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
+                      }
                     />
                   </div>
                   <div className="mb-4">
                     <label className="flex items-center justify-center h-14 w-full cursor-pointer rounded-xl border-2 border-default-200">
                       <div className="flex items-center space-x-2">
-                        {" "}
-                        {/* Added space between icon and text */}
-                        <FiUpload className="text-2xl text-default-400" />{" "}
-                        {/* Optional: you can customize the icon size and color */}
+                        <UploadIcon
+                          size={22}
+                          className="text-2xl text-default-400"
+                        />
                         <span className="text-lg font-semibold">
                           Upload image
-                        </span>{" "}
-                        {/* Optional: Adjust the text style */}
+                        </span>
                       </div>
+                      <input
+                        id="image"
+                        className="hidden"
+                        type="file"
+                        onChange={(e) => handleImageChange(e)}
+                      />
                     </label>
-                    <input
-                      id="image"
-                      className="hidden"
-                      type="file"
-                      onChange={(e) => handleImageChange(e)}
-                    />
                   </div>
 
                   <button
