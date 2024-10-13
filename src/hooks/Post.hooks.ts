@@ -13,8 +13,9 @@ import {
   getMyPosts,
   updatePost,
   votePost,
+  getAllPosts,
 } from "@/src/services/PostServices/PostServices";
-import { TCreatePost, TUpdatePost } from "@/src/types/index";
+import TCreatePost, { TUpdatePost } from "@/src/types/index";
 
 export const usePostComment = () => {
   return useMutation<any, Error, FieldValues>({
@@ -61,12 +62,13 @@ export const useEditComment = () => {
   });
 };
 
-// export const useGetAllPosts = ({ searchQuery, category }) => {
-//   return useQuery({
-//     queryKey: ["all-posts", { searchQuery, category }],
-//     queryFn: async () => await getAllPosts({ searchQuery, category }),
-//   });
-// };
+export const useGetAllPosts = ({ searchQuery = "", category = "" }) => {
+  return useQuery({
+    queryKey: ["all-posts", { searchQuery, category }],
+    queryFn: () => getAllPosts({ searchQuery, category }),
+    staleTime: 1 * 60 * 1000, // 1 minutes of fresh data
+  });
+};
 
 export const useGetMostLikedPosts = () => {
   return useQuery({

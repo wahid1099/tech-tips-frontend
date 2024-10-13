@@ -3,25 +3,24 @@ import { revalidateTag } from "next/cache";
 
 import axiosInstance from "@/src/services/Axios/AxiosInstences";
 import { envConfig } from "@/src/config/index";
-import { TCreatePost, TUpdatePost } from "@/src/types/index";
+import TCreatePost, { TUpdatePost } from "@/src/types/index";
 
-// export const getAllPosts = async ({ searchQuery, category }) => {
-//   const params = {};
+export const getAllPosts = async ({ searchQuery = "", category = "" }) => {
+  // Define params directly with conditional inclusion
+  const params = {
+    ...(searchQuery && { searchQuery }), // Add searchQuery only if it exists
+    ...(category && { category }), // Add category only if it exists
+  };
 
-//   console.log(params);
+  try {
+    const res = await axiosInstance.get("/post", { params });
 
-//   if (searchQuery) {
-//     params.searchQuery = searchQuery;
-//   }
-
-//   if (category) {
-//     params.category = category;
-//   }
-
-//   const res = await axiosInstance.get("/post", { params });
-
-//   return res.data;
-// };
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw new Error("Failed to fetch posts");
+  }
+};
 
 export const getMostLikedPosts = async () => {
   try {

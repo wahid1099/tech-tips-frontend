@@ -32,6 +32,10 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 import "react-quill/dist/quill.snow.css";
 import { dropdownItems } from "@/src/types/index";
 import Postskeleton from "@/src/components/posts/Postskeleton";
+import { useCreatePost } from "@/src/hooks/Post.hooks";
+import uploadImageToCloudinary from "@/src/utils/uploadImage";
+import TCreatePost from "@/src/types/index";
+
 const EditorModal = () => {
   const { user, isLoading } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +45,7 @@ const EditorModal = () => {
   const [category, setCategory] = useState<string>("");
   const [isPremium, setIsPremium] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+  const { mutate: createHandlePost, isPending, isSuccess } = useCreatePost();
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -63,16 +68,37 @@ const EditorModal = () => {
     setTags(e.target.value.split(",").map((tag) => tag.trim()));
   };
 
-  const handlePost = () => {
-    console.log({
-      title,
-      editorValue,
-      image,
-      category,
-      isPremium,
-      tags,
-    });
-    handleClose();
+  const handlePost = async () => {
+    try {
+      let thumbnailImage = null;
+      if (image) {
+        thumbnailImage = await uploadImageToCloudinary(image);
+      }
+
+      const postData: TCreatePost = {
+        title,
+        description: editorValue,
+        category,
+        tags,
+        contents: editorValue, // This corresponds to your required fields
+        author: user?._id as string,
+        isPremium,
+        thumbnailImage: thumbnailImage || "", // Ensure this is a string
+      };
+
+      await createHandlePost(postData);
+      // Reset state after successful post creation
+      setTitle("");
+      setEditorValue("");
+      setImage(null);
+      setCategory("");
+      setTags([]);
+      setIsPremium(false);
+      handleClose(); // Close modal after posting
+    } catch (error) {
+      console.error("Error creating post:", error);
+      // Show error message to user
+    }
   };
 
   const modules = {

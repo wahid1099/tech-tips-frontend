@@ -4,13 +4,23 @@ import EditorModal from "@/src/components/posts/createpost";
 import { useUser } from "@/src/context/UserContext";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
-
+import MemberShip from "@/src/components/UI/MemberShip/MembershipBanner";
+import PostCard from "@/src/components/posts/PostCard";
+import PostsList from "@/src/components/posts/PostsList ";
+import React, { Suspense, lazy } from "react";
+import { CircularProgress } from "@nextui-org/react";
+import Postskeleton from "@/src/components/posts/Postskeleton";
 export default function Home() {
   const { user, isLoading } = useUser();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const [value, setValue] = React.useState(0);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((v) => (v >= 100 ? 0 : v + 10));
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   if (!user) {
     return (
@@ -30,7 +40,11 @@ export default function Home() {
 
   return (
     <div>
+      <MemberShip />
       <EditorModal />
+      <Suspense fallback={<Postskeleton />}>
+        <PostsList />
+      </Suspense>
     </div>
   );
 }

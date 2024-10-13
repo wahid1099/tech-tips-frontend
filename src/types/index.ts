@@ -94,17 +94,17 @@ export interface TInput {
   disabled?: boolean;
 }
 
-export interface TCreatePost {
+export default interface TCreatePost {
   title: string;
   description: string;
-  contents: string;
-  thumbnailImage: string;
   category: string;
   tags: string[];
-  pdfVersion?: string;
-  isPremium: boolean;
+  contents: string; // Ensure this is correctly defined
   author: string;
+  isPremium: boolean;
+  thumbnailImage?: string | null; // Allow null or undefined values
 }
+
 export interface TUpdatePost {
   title?: string;
   description?: string;

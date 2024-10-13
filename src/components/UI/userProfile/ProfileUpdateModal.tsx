@@ -7,17 +7,28 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
+import { User } from "@/src/types/index";
 
-const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
-  const { register, handleSubmit } = useForm({
+interface ProfileUpdateModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  user: User | null;
+}
+
+const ProfileUpdateModal: React.FC<ProfileUpdateModalProps> = ({
+  isOpen,
+  onClose,
+  user,
+}) => {
+  const { register, handleSubmit } = useForm<User>({
     defaultValues: {
-      name: user.name,
-      profession: user.profession,
-      bio: user.bio,
+      name: user?.name || "",
+      profession: user?.profession || "",
+      bio: user?.bio || "",
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: User) => {
     // Handle profile update API call here
     console.log(data);
     onClose();

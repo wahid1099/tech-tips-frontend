@@ -45,13 +45,14 @@ const RegisterPage = () => {
     setImageUploadLoading(true);
 
     try {
-      const files = await uploadImageToCloudinary(e.target.files);
+      const file = e.target.files[0];
+      const uploadedImageUrl = await uploadImageToCloudinary(file);
 
-      if (files && files.length > 0) {
-        setProfileImage(files);
+      if (uploadedImageUrl) {
+        setProfileImage(uploadedImageUrl);
       }
     } catch (error: any) {
-      toast.error("Error uploading image:", error);
+      toast.error(`Error uploading image: ${error.message}`);
     } finally {
       setImageUploadLoading(false);
     }
