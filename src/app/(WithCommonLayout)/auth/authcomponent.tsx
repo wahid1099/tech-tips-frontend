@@ -7,6 +7,7 @@ import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import "./auth.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { Spinner } from "@nextui-org/spinner";
 
 import CustomForm from "@/src/components/Form/CustomForm";
 import { CustomInput } from "@/src/components/Form/CustomInput";
@@ -38,6 +39,7 @@ const AuthTabs = () => {
 
   const { mutate: handleUserRegistration } = useUserRegistration();
   const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
+
   const { isSetLoading: UserLoading } = useUser();
 
   const [imageUploadLoading, setImageUploadLoading] = useState(false);
@@ -90,8 +92,8 @@ const AuthTabs = () => {
   };
 
   const onSubmitLogin: SubmitHandler<FieldValues> = (data) => {
+    UserLoading(true); // Start loading state for user context if necessary
     handleUserLogin(data);
-    UserLoading(true);
   };
 
   useEffect(() => {
@@ -103,6 +105,10 @@ const AuthTabs = () => {
       }
     }
   }, [isPending, isSuccess, redirect, router]);
+
+  if (isPending) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen py-10">

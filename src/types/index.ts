@@ -116,3 +116,27 @@ export interface TUpdatePost {
   isPremium?: boolean;
   author?: string;
 }
+
+export const dropdownItems = [
+  { key: "Web", label: "Web" },
+  { key: "Android", label: "Android" },
+  { key: "Software Engineering", label: "Software Engineering" },
+  { key: "VR", label: "VR" },
+  { key: "Mobile", label: "Mobile" },
+  { key: "Macbook", label: "Macbook" },
+  { key: "Gaming", label: "Gaming" },
+  { key: "Artificial Intelligence", label: "Artificial Intelligence" },
+  { key: "Blockchain", label: "Blockchain" },
+  { key: "Cybersecurity", label: "Cybersecurity" },
+  { key: "Data Science", label: "Data Science" },
+  { key: "Machine Learning", label: "Machine Learning" },
+  { key: "Natural Language Processing", label: "Natural Language Processing" },
+  { key: "Cloud Computing", label: "Cloud Computing" },
+  { key: "Quantum Computing", label: "Quantum Computing" },
+  { key: "Quantum Cryptography", label: "Quantum Cryptography" },
+  {
+    key: "Artificial General Intelligence",
+    label: "Artificial General Intelligence",
+  },
+  { key: "Others", label: "Others" },
+];

@@ -45,7 +45,11 @@ const ProfileHeader = () => {
               {user?.profession || "No profession"}
             </p>
 
-            <div className="flex space-x-4">
+            {/* User bio */}
+            <p className="mt-2 text-gray-700 dark:text-gray-400">
+              {user?.bio || "No Bio"}
+            </p>
+            <div className="flex space-x-4 mt-2">
               <span className="text-gray-700 dark:text-gray-300">
                 {user?.followers.length} Followers
               </span>
