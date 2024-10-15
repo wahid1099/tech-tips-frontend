@@ -130,7 +130,7 @@ const EditorModal: React.FC<IProps> = ({
     }
 
     try {
-      let uploadedImage = post?.thumbnailImage || null;
+      let uploadedImage: string | undefined | null;
       if (image) {
         uploadedImage = await uploadImageToCloudinary(image);
       }
