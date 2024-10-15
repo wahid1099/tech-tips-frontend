@@ -1,4 +1,3 @@
-// Importing necessary components and utilities
 import "@/src/styles/globals.css";
 import { fontSans } from "@/src/config/font";
 
@@ -69,6 +68,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {/* Wrapping the application with Providers for theme management */}
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           {/* Using CommonLayout to structure the page */}
+
           {children}
         </Providers>
       </body>

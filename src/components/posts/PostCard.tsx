@@ -19,8 +19,7 @@ const PostCard = ({ post }: { post: TPost }) => {
   const [category, setCategory] = useState("");
   const { mutate: createVote } = useVotePost();
   // State to track loading
-  const [loading, setLoading] = useState(false);
-
+  console.log(post);
   const { user } = useUser();
   // Check if the user has already upvoted or downvoted the post
   const hasUpvoted =
@@ -31,27 +30,15 @@ const PostCard = ({ post }: { post: TPost }) => {
   // Handle voting
   const handleVotes = async (postId: string, action: string) => {
     try {
-      setLoading(true); // Set loading state
-
       let voteAction = action;
 
       // Remove the upvote if the user already upvoted
-      if (action === "upvote" && hasUpvoted) {
-        voteAction = "removeUpvote";
+      if (action === "upvote") {
+        voteAction = "upvote";
       }
       // Remove the downvote if the user already downvoted
-      else if (action === "downvote" && hasDownvoted) {
-        voteAction = "removeDownvote";
-      }
-      // If the user switches votes (upvote to downvote or vice versa)
-      else if (action === "upvote" && hasDownvoted) {
-        voteAction = "removeDownvote"; // Remove downvote first
-        await createVote({ postId, action: voteAction }); // Remove downvote
-        voteAction = "upvote"; // Then set to upvote
-      } else if (action === "downvote" && hasUpvoted) {
-        voteAction = "removeUpvote"; // Remove upvote first
-        await createVote({ postId, action: voteAction }); // Remove upvote
-        voteAction = "downvote"; // Then set to downvote
+      else if (action === "downvote") {
+        voteAction = "downvote";
       }
 
       console.log("action", voteAction); // Debugging: Log the action being taken
@@ -68,7 +55,6 @@ const PostCard = ({ post }: { post: TPost }) => {
       console.error(error); // Log error for debugging
       toast.error("Something went wrong. Please try again!");
     } finally {
-      setLoading(false); // Stop loading
     }
   };
 
@@ -122,15 +108,22 @@ const PostCard = ({ post }: { post: TPost }) => {
             dangerouslySetInnerHTML={{ __html: post.description }} // Using dangerouslySetInnerHTML for HTML descriptions
           />
 
-          {post.images.length > 0 && (
-            <Image
-              src={post.images[0]}
-              alt={post.title}
-              width={500}
-              height={300}
-              className="w-full h-auto rounded-lg"
-            />
-          )}
+          <div className="overflow-hidden relative ">
+            {post?.thumbnailImage ? (
+              <Image
+                alt="Small robot"
+                className="object-cover cursor-pointer w-full h-[250px] transition-transform duration-300 group-hover:scale-110"
+                height={250}
+                src={post.thumbnailImage}
+                width={400}
+              />
+            ) : (
+              // Optionally, you can render a placeholder or nothing if no image is available
+              <div className="w-full h-[250px] flex items-center justify-center bg-gray-200">
+                {/* <p className="text-gray-500">No image available</p> */}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Post Actions: Upvote, Downvote, Comment */}
@@ -144,7 +137,7 @@ const PostCard = ({ post }: { post: TPost }) => {
               }}
             >
               <FaThumbsUp className="mr-2" />
-              {post?.upvotes || 0} Likes
+              {post?.upVotes?.length || 0} Likes
             </button>
             <button
               className={`flex items-center ${hasDownvoted ? "text-red-500" : "text-gray-700"} dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400`}
@@ -154,7 +147,7 @@ const PostCard = ({ post }: { post: TPost }) => {
               }}
             >
               <FaThumbsDown className="mr-2" />
-              {post?.downVotes || 0} Dislikes
+              {post?.downVotes?.length || 0} Likes
             </button>
           </div>
           <Link

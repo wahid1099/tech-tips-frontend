@@ -56,6 +56,7 @@ export const useEditComment = () => {
       commentId: string;
       comment: { content: string };
     }) => await editComment(postId, commentId, comment),
+
     onError: () => {
       toast.error("Failed to edit comment!");
     },
@@ -88,8 +89,9 @@ export const useVotePost = () => {
   return useMutation<any, Error, { postId: string; action: string }>({
     mutationKey: ["vote-post"],
     mutationFn: async ({ postId, action }) => await votePost(postId, action),
-    onError: () => {
-      toast.error("Failed to vote post!");
+    onError: (error: any) => {
+      console.error("Error Response:", error.response?.data);
+      // toast.error(error?.message);
     },
   });
 };

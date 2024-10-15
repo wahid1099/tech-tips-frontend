@@ -51,10 +51,10 @@ const ProfileHeader = () => {
             </p>
             <div className="flex space-x-4 mt-2">
               <span className="text-gray-700 dark:text-gray-300">
-                {user?.followers.length} Followers
+                {user?.followers?.length || 0} Followers
               </span>
               <span className="text-gray-700 dark:text-gray-300">
-                {user?.following.length} Following
+                {user?.following?.length || 0} Following
               </span>
             </div>
           </div>
@@ -68,7 +68,6 @@ const ProfileHeader = () => {
         <ProfileUpdateModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          user={user}
         />
       )}
     </Card>

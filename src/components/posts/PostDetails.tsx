@@ -19,6 +19,7 @@ import {
   Avatar,
   Button,
   Divider,
+  Image,
   Link,
 } from "@nextui-org/react";
 import { FaVoteYea } from "react-icons/fa";
@@ -78,7 +79,6 @@ const PostData = ({ post }: { post: TPost }) => {
     handleEditComment({ postId: post?._id, commentId, comment: { content } });
     setEditingCommentId(null);
   };
-  // p0: string
   const handleFollow = (followingId: string, p0: string) => {
     createFollow(followingId);
   };
@@ -190,13 +190,29 @@ const PostData = ({ post }: { post: TPost }) => {
                 className="mb-4"
               />
             </div>
+            <div className="overflow-hidden relative ">
+              {post?.thumbnailImage ? (
+                <Image
+                  alt="Small robot"
+                  className="object-cover cursor-pointer w-full h-[250px] transition-transform duration-300 group-hover:scale-110"
+                  height={250}
+                  src={post.thumbnailImage}
+                  width={400}
+                />
+              ) : (
+                // Optionally, you can render a placeholder or nothing if no image is available
+                <div className="w-full h-[250px] flex items-center justify-center bg-gray-200">
+                  {/* <p className="text-gray-500">No image available</p> */}
+                </div>
+              )}
+            </div>
           </CardBody>
           <div className="p-6 bg-muted/50">
             <div className="flex flex-wrap items-center justify-between w-full gap-4">
               <div className="flex space-x-4 items-center">
                 <Button size="sm" variant="ghost">
                   <FaVoteYea className="w-4 h-4 mr-2" />
-                  {post?.upvotes || 0} Upvotes
+                  {post?.upVotes?.length || 0} Upvotes
                 </Button>
                 <Button size="sm" variant="ghost">
                   <BarChart2 className="w-4 h-4 mr-2" />
@@ -366,7 +382,6 @@ const PostData = ({ post }: { post: TPost }) => {
                 type="submit"
                 variant="bordered"
                 href={`/auth?redirect=/${post?._id}`}
-                // disabled={!user || (isPending && !isSuccess)}
               >
                 {isPending && isSuccess ? "Posting..." : "Post Comment"}
               </Button>

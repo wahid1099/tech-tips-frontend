@@ -35,10 +35,14 @@ export const useUserRegistration = () => {
 // login
 
 export const useUserLogin = () => {
+  const { setUser } = useUser(); // Import and use setUser
+
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_LOGIN"],
     mutationFn: async (userData) => await loginUser(userData),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setUser(data); // Set the user data in the context after successful login
+
       toast.success("User logged in successfully", {
         duration: 1000,
         position: "top-center",
@@ -54,10 +58,15 @@ export const useUserLogin = () => {
 };
 
 export const useUserUpdate = (userId: string) => {
+  const { setUser } = useUser(); // Import and use setUser
+  const queryClient = useQueryClient(); // Get the query client
+
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_UPDATE", userId],
     mutationFn: async (userData) => await updateUser(userId, userData),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setUser(data.data);
+      // console.log(data);
       toast.success("User updated successfully", {
         duration: 1000,
         position: "top-center",

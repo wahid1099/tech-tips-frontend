@@ -45,7 +45,7 @@ export interface TPost {
   upVotes: string[];
   downVotes: string[];
   comments: any[];
-  images: string[];
+  thumbnailImage: string;
   status: string;
   pdfVersion: string;
   isDeleted: boolean;

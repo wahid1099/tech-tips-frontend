@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
     } else {
       // Redirect to login if trying to access restricted routes
       return NextResponse.redirect(
-        new URL(`/login?redirect=${pathname}`, request.url)
+        new URL(`/auth?redirect=${pathname}`, request.url)
       );
     }
   }

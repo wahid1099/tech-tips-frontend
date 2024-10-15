@@ -127,19 +127,21 @@ export const deleteComment = async (postId: string, commentId: string) => {
 };
 export const votePost = async (postId: string, action: string) => {
   try {
+    console.log("Request Data:", { postId, action }); // Add logging
     const { data } = await axiosInstance.put(`/post/${postId}/vote`, {
       action,
     });
 
     if (data?.success) {
       revalidateTag("post");
-
       return null;
     }
   } catch (error: any) {
-    throw new Error(error);
+    console.error("Error Response:", error.response?.data || error.message); // More specific logging
+    throw new Error(error.response?.data?.message || "Something went wrong");
   }
 };
+
 export const getMyPosts = async ({ searchQuery = "", category = "" }) => {
   try {
     const { data } = await axiosInstance.get("/post/my-posts", {

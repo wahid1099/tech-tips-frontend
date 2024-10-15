@@ -11,6 +11,7 @@ import MakePayments from "./MakePayments";
 import Paid from "./Paid";
 import Analytics from "./analytics";
 import { Skeleton } from "@nextui-org/react";
+import MyPostTable from "./PostTable";
 
 const UserProfileTabs = () => {
   return (
@@ -19,7 +20,7 @@ const UserProfileTabs = () => {
         <Tabs variant="underlined" aria-label="Profile Tabs">
           <Tab key="myPosts" title="My Posts">
             <div className="p-4">
-              <MyPosts />
+              <MyPostTable />
             </div>
           </Tab>
 

@@ -89,9 +89,14 @@ export const updateUser = async (userId: string, userData: FieldValues) => {
 
     return res.data;
   } catch (error: any) {
+    // Check if there's a response object to get a more specific error message
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || "Failed to update user");
+    }
     throw new Error(error.message || "Failed to update user");
   }
 };
+
 export const userRoleUpdate = async (userId: string) => {
   try {
     const res = await axiosInstance.put(`/auth/toggole-user-role/${userId}`);

@@ -1,15 +1,19 @@
 "use client";
 import { Card, Skeleton } from "@nextui-org/react";
 import { useUser } from "@/src/context/UserContext";
+import { useGetMyPosts } from "@/src/hooks/Post.hooks";
+import React, { useCallback, useState } from "react";
+import { debounce } from "lodash";
+import { User, TPost } from "@/src/types";
 
 const MyPosts = () => {
-  const { user, isLoading } = useUser();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("");
 
+  const { user, isLoading } = useUser();
+  const { data, error } = useGetMyPosts({ searchQuery, category });
   // Example posts data (replace with actual posts API)
-  const posts = [
-    { id: 1, title: "Post 1", content: "This is the first post." },
-    { id: 2, title: "Post 2", content: "This is the second post." },
-  ];
+  const posts = data?.data || [];
 
   if (isLoading) {
     return (
@@ -24,8 +28,8 @@ const MyPosts = () => {
     <div className="mt-6">
       <h2 className="text-xl font-semibold mb-4">My Posts</h2>
       <div className="grid grid-cols-1 gap-4">
-        {posts.map((post) => (
-          <Card key={post.id} className="p-4">
+        {posts.map((post: TPost) => (
+          <Card key={post._id} className="p-4">
             <h3 className="font-bold">{post.title}</h3>
             <p className="text-gray-600">{post.content}</p>
           </Card>
