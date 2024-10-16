@@ -3,19 +3,35 @@ import { revalidateTag } from "next/cache";
 
 import axiosInstance from "@/src/services/Axios/AxiosInstences";
 import { envConfig } from "@/src/config/index";
-import TCreatePost, { TUpdatePost } from "@/src/types/index";
+import TCreatePost, {
+  TUpdatePost,
+  Pagination,
+  PostResponse,
+} from "@/src/types/index";
+import { TPost } from "@/src/types/index";
 
-export const getAllPosts = async ({ searchQuery = "", category = "" }) => {
-  // Define params directly with conditional inclusion
+export const getAllPosts = async ({
+  searchQuery = "",
+  category = "",
+  page = 1,
+  limit = 5,
+}): Promise<PostResponse> => {
   const params = {
-    ...(searchQuery && { searchQuery }), // Add searchQuery only if it exists
-    ...(category && { category }), // Add category only if it exists
+    ...(searchQuery && { searchQuery }),
+    ...(category && { category }),
+    page,
+    limit,
   };
 
   try {
-    const res = await axiosInstance.get("/post", { params });
-
-    return res.data;
+    const res = await axiosInstance.get<PostResponse>("/post", { params });
+    return {
+      success: res.data.success,
+      statuscode: res.data.statuscode,
+      message: res.data.message,
+      data: res.data.data,
+      pagination: res.data.pagination,
+    };
   } catch (error) {
     console.error("Error fetching posts:", error);
     throw new Error("Failed to fetch posts");

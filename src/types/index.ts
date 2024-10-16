@@ -140,3 +140,22 @@ export const dropdownItems = [
   },
   { key: "Others", label: "Others" },
 ];
+
+export default interface GetAllPostsParams {
+  searchQuery?: string;
+  limit?: number;
+  page?: number;
+}
+export interface Pagination {
+  totalPosts: number;
+  totalPages: number;
+  currentPage: number;
+  hasMore: boolean;
+}
+export interface PostResponse {
+  success: boolean;
+  statuscode: number;
+  message: string;
+  data: TPost[];
+  pagination: Pagination;
+}

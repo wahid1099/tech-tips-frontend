@@ -19,7 +19,6 @@ const PostCard = ({ post }: { post: TPost }) => {
   const [category, setCategory] = useState("");
   const { mutate: createVote } = useVotePost();
   // State to track loading
-  console.log(post);
   const { user } = useUser();
   // Check if the user has already upvoted or downvoted the post
   const hasUpvoted =

@@ -1,7 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+  QueryFunctionContext,
+} from "@tanstack/react-query";
+
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-
+import { TPost } from "@/src/types/index";
 import {
   createComment,
   createPost,
@@ -15,8 +22,38 @@ import {
   votePost,
   getAllPosts,
 } from "@/src/services/PostServices/PostServices";
-import TCreatePost, { TUpdatePost } from "@/src/types/index";
+import TCreatePost, {
+  TUpdatePost,
+  Pagination,
+  PostResponse,
+} from "@/src/types/index";
 
+// useGetAllPosts Hook
+// export const useGetAllPosts = (searchQuery = "", category = "", limit = 10) => {
+//   return useInfiniteQuery<PostResponse, Error>(
+//     ["posts", searchQuery, category], // Unique query key including searchQuery and category
+//     async ({ pageParam = 1 }) => {
+//       // Call the getAllPosts function with the current parameters
+//       return await getAllPosts({
+//         searchQuery,
+//         category,
+//         page: pageParam,
+//         limit,
+//       });
+//     },
+//     {
+//       initialPageParam: 0,
+//       getPreviousPageParam: (firstPage) => firstPage.currentPage - 1,
+//       getNextPageParam: (lastPage) => {
+//         // Check if there are more pages and return the next page number
+//         return lastPage.pagination.hasMore
+//           ? lastPage.pagination.currentPage + 1
+//           : undefined;
+//       },
+//       keepPreviousData: true, // Keep previous data while fetching new pages
+//     }
+//   );
+// };
 export const usePostComment = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["post-comment"],
@@ -60,14 +97,6 @@ export const useEditComment = () => {
     onError: () => {
       toast.error("Failed to edit comment!");
     },
-  });
-};
-
-export const useGetAllPosts = ({ searchQuery = "", category = "" }) => {
-  return useQuery({
-    queryKey: ["all-posts", { searchQuery, category }],
-    queryFn: () => getAllPosts({ searchQuery, category }),
-    staleTime: 1 * 60 * 1000, // 1 minutes of fresh data
   });
 };
 
