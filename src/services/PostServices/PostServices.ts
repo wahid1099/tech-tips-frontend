@@ -23,6 +23,7 @@ export const getAllPosts = async ({
     limit,
   };
 
+  console.log(params);
   try {
     const res = await axiosInstance.get<PostResponse>("/post", { params });
     return {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import { TPost, Pagination } from "@/src/types"; // Import your types
 import Postskeleton from "./Postskeleton";
@@ -10,7 +10,6 @@ import { Spinner } from "@nextui-org/spinner";
 const PostsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
-  // Specify the type for posts as TPost[]
   const [posts, setPosts] = useState<TPost[]>([]); // Change here
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -19,7 +18,6 @@ const PostsList = () => {
 
   const fetchPosts = async () => {
     setLoading(true);
-
     try {
       const { data, pagination } = await getAllPosts({
         searchQuery,
@@ -31,7 +29,6 @@ const PostsList = () => {
       setPosts((prevPosts) => [...prevPosts, ...data]); // Append new posts
       setTotalPosts(pagination.totalPosts);
       setHasMore(pagination.hasMore);
-      setCurrentPage((prevPage) => prevPage + 1); // Increment page for the next request
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -40,11 +37,18 @@ const PostsList = () => {
   };
 
   useEffect(() => {
+    setPosts([]); // Reset posts
+    setCurrentPage(1); // Reset current page
     fetchPosts();
   }, [searchQuery, category]); // Add dependencies to refetch on changes
 
+  useEffect(() => {
+    if (currentPage > 1) {
+      fetchPosts();
+    }
+  }, [currentPage]); // Fetch more posts on currentPage change
+
   if (loading && posts.length === 0) return <Postskeleton />;
-  // if (error) return <p>Failed to load posts</p>;
 
   return (
     <div className="container mx-auto px-4">
@@ -71,7 +75,7 @@ const PostsList = () => {
       </div>
       <InfiniteScroll
         dataLength={posts.length}
-        next={fetchPosts}
+        next={() => setCurrentPage((prevPage) => prevPage + 1)}
         hasMore={hasMore}
         loader={<Spinner />}
         endMessage={
