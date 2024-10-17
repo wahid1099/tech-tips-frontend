@@ -1,34 +1,59 @@
 import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
-import { TPost, Pagination } from "@/src/types"; // Import your types
+import { TPost, Pagination } from "@/src/types";
 import Postskeleton from "./Postskeleton";
 import { dropdownItems } from "@/src/types/index"; // Adjust the path as necessary
-import { getAllPosts } from "@/src/services/PostServices/PostServices";
+import {
+  getAllPosts,
+  getMostLikedPosts,
+  getLowestLikedPosts,
+} from "@/src/services/PostServices/PostServices"; // Import necessary services
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Spinner } from "@nextui-org/spinner";
 
 const PostsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
-  const [posts, setPosts] = useState<TPost[]>([]); // Change here
+  const [filterType, setFilterType] = useState("all"); // New state for filter type
+  const [posts, setPosts] = useState<TPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
-  const [hasMore, setHasMore] = useState(true); // Track if there are more posts to load
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const { data, pagination } = await getAllPosts({
-        searchQuery,
-        category,
-        page: currentPage,
-        limit: 5, // or whatever your limit is
-      });
+      let data: TPost[] = [];
+      let pagination: Pagination | undefined;
 
-      setPosts((prevPosts) => [...prevPosts, ...data]); // Append new posts
-      setTotalPosts(pagination.totalPosts);
-      setHasMore(pagination.hasMore);
+      // Handle different filter types
+      if (filterType === "highest") {
+        const response = await getMostLikedPosts();
+        data = response.data.mostLikedPosts || [];
+        pagination = response.pagination;
+      } else if (filterType === "lowest") {
+        const response = await getLowestLikedPosts({
+          searchQuery,
+          category,
+        });
+        data = response.data.lowestLikedPosts || [];
+        pagination = response.pagination;
+      } else {
+        // Default case: fetch all posts
+        const response = await getAllPosts({
+          searchQuery,
+          category,
+          page: currentPage,
+          limit: 5,
+        });
+        data = response.data || [];
+        pagination = response.pagination;
+      }
+
+      setPosts((prevPosts) => [...prevPosts, ...data]);
+      setTotalPosts(pagination?.totalPosts || 0);
+      setHasMore(pagination?.hasMore || false);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -39,14 +64,14 @@ const PostsList = () => {
   useEffect(() => {
     setPosts([]); // Reset posts
     setCurrentPage(1); // Reset current page
-    fetchPosts();
-  }, [searchQuery, category]); // Add dependencies to refetch on changes
+    fetchPosts(); // Fetch posts when filter, search query, or category changes
+  }, [searchQuery, category, filterType]);
 
   useEffect(() => {
     if (currentPage > 1) {
       fetchPosts();
     }
-  }, [currentPage]); // Fetch more posts on currentPage change
+  }, [currentPage]); // Fetch more posts on page change
 
   if (loading && posts.length === 0) return <Postskeleton />;
 
@@ -72,12 +97,25 @@ const PostsList = () => {
             </option>
           ))}
         </select>
+
+        {/* Filter selection for "highest" and "lowest" */}
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="border rounded p-2 w-full md:w-1/2 lg:w-1/3"
+        >
+          <option value="all">All Posts</option>
+          <option value="highest">Highest Liked Posts</option>
+          <option value="lowest">Lowest Liked Posts</option>
+        </select>
       </div>
+
       <InfiniteScroll
         dataLength={posts.length}
         next={() => setCurrentPage((prevPage) => prevPage + 1)}
         hasMore={hasMore}
         loader={<Spinner />}
+        style={{ overflow: "hidden" }}
         endMessage={
           <p style={{ textAlign: "center" }}>
             <b>Yay! You have seen it all</b>

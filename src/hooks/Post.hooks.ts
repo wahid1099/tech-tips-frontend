@@ -104,6 +104,7 @@ export const useGetMostLikedPosts = () => {
   return useQuery({
     queryKey: ["most-liked-posts"],
     queryFn: async () => await getMostLikedPosts(),
+    staleTime: 1000 * 60 * 5, // optional: cache data for 5 minutes
   });
 };
 
@@ -111,6 +112,7 @@ export const useGetLowestLikedPosts = ({ searchQuery = "", category = "" }) => {
   return useQuery({
     queryKey: ["lowest-liked-posts", { searchQuery, category }],
     queryFn: async () => await getLowestLikedPosts({ searchQuery, category }),
+    staleTime: 1000 * 60 * 5,
   });
 };
 
