@@ -13,15 +13,17 @@ import Postskeleton from "@/src/components/posts/Postskeleton";
 export default function Home() {
   const { user, isLoading } = useUser();
 
-  const [value, setValue] = React.useState(0);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setValue((v) => (v >= 100 ? 0 : v + 10));
-    }, 500);
+  // Display loading state if user data is loading
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <CircularProgress color="primary" />
+        <p className="mt-4">Loading user data...</p>
+      </div>
+    );
+  }
 
-    return () => clearInterval(interval);
-  }, []);
-
+  // Handle case where user is not logged in
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">

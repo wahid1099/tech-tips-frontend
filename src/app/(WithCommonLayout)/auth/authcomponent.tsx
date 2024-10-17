@@ -37,8 +37,9 @@ const AuthTabs = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const { mutate: handleUserRegistration } = useUserRegistration();
+  const { mutate: handleUserRegistration, status } = useUserRegistration();
   const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
+  const isLoading = status === "pending"; // Determine if the mutation is loading
 
   const { isSetLoading: UserLoading } = useUser();
 
@@ -69,7 +70,7 @@ const AuthTabs = () => {
       birthDate: dateToISO(data.birthDate),
       profileImage: profileImage,
     };
-    handleUserRegistration(userData);
+    await handleUserRegistration(userData);
   };
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -297,7 +298,9 @@ const AuthTabs = () => {
                           className="text-2xl text-default-400"
                         />
                         <span className="text-lg font-semibold">
-                          Upload image
+                          {imageUploadLoading
+                            ? "Uploading image..."
+                            : "Upload image"}
                         </span>
                       </div>
                       <input
@@ -312,9 +315,9 @@ const AuthTabs = () => {
                   <button
                     className="w-full py-2 text-white bg-green-500 font-semibold rounded-lg hover:bg-green-600 transition-colors"
                     type="submit"
-                    disabled={imageUploadLoading}
+                    disabled={isLoading || imageUploadLoading}
                   >
-                    Register
+                    {isLoading ? "Registering..." : "Register"}
                   </button>
                 </CustomForm>
               </CardBody>

@@ -11,14 +11,10 @@ import {
 } from "../services/UserServices/AuthServices";
 
 export const useUserRegistration = () => {
-  const { setUser } = useUser(); // Use setUser from the context to update user
-
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_REGISTRATION"],
     mutationFn: async (userData) => await createUser(userData),
     onSuccess: (data) => {
-      setUser(data); // Update the user in context after successful login
-
       toast.success("User registered successfully", {
         duration: 1000,
         position: "top-center",
