@@ -108,3 +108,28 @@ export const userRoleUpdate = async (userId: string) => {
     );
   }
 };
+
+export const resetPassword = async (
+  token: string,
+  newPassword: string,
+  email: string
+): Promise<any> => {
+  try {
+    const payload = {
+      email,
+      newPassword,
+    };
+
+    const res = await axiosInstance.post("/auth/reset-password", payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to reset user password"
+    );
+  }
+};
