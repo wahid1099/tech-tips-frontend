@@ -8,7 +8,7 @@ import "./auth.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Spinner } from "@nextui-org/spinner";
-
+import Link from "next/link";
 import CustomForm from "@/src/components/Form/CustomForm";
 import { CustomInput } from "@/src/components/Form/CustomInput";
 import TechSelect from "@/src/components/Form/TechSelect";
@@ -184,6 +184,14 @@ const AuthTabs = () => {
                     />
                   </div>
 
+                  {/* Optional Remember Me checkbox */}
+                  <div className="flex items-center mb-4">
+                    <input type="checkbox" id="rememberMe" className="mr-2" />
+                    <label htmlFor="rememberMe" className="text-sm">
+                      Remember Me
+                    </label>
+                  </div>
+
                   <button
                     className="w-full py-2 text-white bg-green-500 font-semibold rounded-lg hover:bg-green-600 transition-colors"
                     type="submit"
@@ -191,6 +199,12 @@ const AuthTabs = () => {
                     Login
                   </button>
                 </CustomForm>
+                <Link
+                  href="/forgot-password"
+                  className="text-blue-600 hover:underline"
+                >
+                  Forgot your password?
+                </Link>
               </CardBody>
             </Card>
           </Tab>

@@ -133,3 +133,21 @@ export const resetPassword = async (
     );
   }
 };
+
+export const forgotPassword = async (email: string): Promise<any> => {
+  try {
+    const payload = {
+      email,
+    };
+
+    // Call the forgot-password API endpoint to send the reset link
+    const res = await axiosInstance.post("/auth/forgot-password", payload);
+
+    return res.data; // Expect this to return a success message
+  } catch (error: any) {
+    // Handle any errors from the API
+    throw new Error(
+      error.response?.data?.message || "Failed to send password reset email"
+    );
+  }
+};
