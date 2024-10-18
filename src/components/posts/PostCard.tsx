@@ -13,11 +13,13 @@ import React, { useState } from "react";
 import { Button } from "@nextui-org/button";
 import { useVotePost } from "@/src/hooks/Post.hooks";
 import { toast } from "sonner";
-
+import { useToggleFollow } from "@/src/hooks/user.hook";
 const PostCard = ({ post }: { post: TPost }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
   const { mutate: createVote } = useVotePost();
+  const { mutate: createFollow } = useToggleFollow();
+
   // State to track loading
   const { user } = useUser();
   // Check if the user has already upvoted or downvoted the post
@@ -57,6 +59,15 @@ const PostCard = ({ post }: { post: TPost }) => {
     }
   };
 
+  const handleFollow = (followingId: string) => {
+    if (user) {
+      createFollow(followingId);
+      toast.success("You are now following the user");
+    } else {
+      window.location.href = `/auth?redirect=/${post?._id}`;
+    }
+  };
+
   const shouldBlur = post.isPremium && (!user || user.payments.length === 0);
 
   return (
@@ -92,9 +103,28 @@ const PostCard = ({ post }: { post: TPost }) => {
               </p>
             </div>
           </div>
-          <button className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition-colors">
-            Follow
-          </button>
+          {user?._id !== post?.author?._id && (
+            <button
+              className={`bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition-colors ${
+                user?.following.includes(post?.author?._id)
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : ""
+              }`}
+              onClick={() => {
+                if (user) {
+                  handleFollow(post?.author?._id); // Follow action
+                } else {
+                  window.location.href = `/auth?redirect=/${post?._id}`; // Redirect if not logged in
+                }
+              }}
+              disabled={user?.following.includes(post?.author?._id)} // Optionally disable the button if already following
+            >
+              {user?.following.includes(post?.author?._id)
+                ? "Following"
+                : "Follow"}{" "}
+              {/* Change text based on following status */}
+            </button>
+          )}
         </div>
 
         {/* Post Content */}

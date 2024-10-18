@@ -54,3 +54,13 @@ export const updateStatusUser = async (
     throw new Error(error?.response?.data?.message);
   }
 };
+
+export const getUserFollowersAndFollowing = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/user/followers-following`);
+
+    return data.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};

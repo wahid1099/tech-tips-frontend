@@ -30,7 +30,7 @@ import { ThemeSwitch } from "@/src/components/Themeswticher";
 
 export const Navbar = () => {
   const router = useRouter();
-  const { user, isSetLoading: UserLoading } = useUser();
+  const { user, setUser, isSetLoading: UserLoading } = useUser();
 
   const pathname = usePathname();
 
@@ -38,11 +38,20 @@ export const Navbar = () => {
     router.push(pathname);
   };
 
-  const handleLogOut = () => {
-    logOut();
-    UserLoading(true);
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push("/");
+  const handleLogOut = async () => {
+    UserLoading(true); // Set loading to true
+    try {
+      await logOut();
+      setUser(null); // Clear the user data from context
+      // Ensure the logout function is awaited if it's asynchronous
+      // Perform any additional actions after logout here if needed
+    } catch (error) {
+      console.error("Logout error:", error); // Handle logout error if needed
+    } finally {
+      UserLoading(false); // Ensure loading is set to false after logout
+      if (protectedRoutes.some((route) => pathname.match(route))) {
+        router.push("/"); // Redirect to home
+      }
     }
   };
 

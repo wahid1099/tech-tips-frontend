@@ -10,6 +10,7 @@ import {
 } from "@/src/services/PostServices/PostServices"; // Import necessary services
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Spinner } from "@nextui-org/spinner";
+import { debounce } from "lodash"; // Import debounce from lodash
 
 const PostsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,6 +21,9 @@ const PostsList = () => {
   const [totalPosts, setTotalPosts] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  // Debounced search handler to minimize API calls
+  const debouncedFetchPosts = debounce(() => fetchPosts(), 500);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -64,7 +68,7 @@ const PostsList = () => {
   useEffect(() => {
     setPosts([]); // Reset posts
     setCurrentPage(1); // Reset current page
-    fetchPosts(); // Fetch posts when filter, search query, or category changes
+    debouncedFetchPosts(); // Use debounced function for fetching posts
   }, [searchQuery, category, filterType]);
 
   useEffect(() => {

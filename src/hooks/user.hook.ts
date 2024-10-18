@@ -6,6 +6,7 @@ import {
   getAllUsers,
   toggleFollow,
   updateStatusUser,
+  getUserFollowersAndFollowing,
 } from "../services/UserServices/Userserivce";
 
 export const useToggleFollow = () => {
@@ -63,5 +64,13 @@ export const useUpdateStatusUser = () => {
     onError: (error: any) => {
       toast.error(error.message);
     },
+  });
+};
+
+export const useGetAllFollowList = () => {
+  return useQuery({
+    queryKey: ["followersAndFollowing"],
+
+    queryFn: async () => await getUserFollowersAndFollowing(),
   });
 };

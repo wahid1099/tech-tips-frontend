@@ -31,14 +31,15 @@ export const useUserRegistration = () => {
 // login
 
 export const useUserLogin = () => {
-  const { setUser } = useUser(); // Import and use setUser
+  const { setUser, isSetLoading: UserLoading } = useUser(); // Import and use setUser
 
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_LOGIN"],
+
     mutationFn: async (userData) => await loginUser(userData),
     onSuccess: (data) => {
       setUser(data); // Set the user data in the context after successful login
-
+      // UserLoading(false);
       toast.success("User logged in successfully", {
         duration: 1000,
         position: "top-center",

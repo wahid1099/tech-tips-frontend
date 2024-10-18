@@ -14,6 +14,7 @@ import { debounce } from "lodash";
 
 import TechModal from "../Modals/TechModal";
 // import CreatePost from "@/src/components/UI/userProfile/CreatePost";
+import { Skeleton } from "@nextui-org/react";
 
 import { columns } from "./Postcontent";
 import MyPostCell from "./MyPostCells";
@@ -26,7 +27,7 @@ export default function MyPostTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
 
-  const { data, error } = useGetMyPosts({ searchQuery, category });
+  const { data, error, isLoading } = useGetMyPosts({ searchQuery, category });
   const { user } = useUser();
 
   const debouncedSearch = useCallback(
@@ -38,14 +39,14 @@ export default function MyPostTable() {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.target.value);
   };
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="text-center my-auto">
-  //       <Spinner color="primary" label="Loading..." labelColor="primary" />
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 gap-4">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+      </div>
+    );
+  }
   if (error) {
     return (
       <div className="text-center text-danger">
