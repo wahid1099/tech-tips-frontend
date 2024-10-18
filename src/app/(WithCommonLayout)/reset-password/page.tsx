@@ -15,6 +15,7 @@ const ResetPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false); // State for theme
 
   useEffect(() => {
     // Extract token and email from the URL
@@ -28,6 +29,12 @@ const ResetPasswordPage = () => {
     } else {
       setError("Invalid or expired reset token.");
     }
+
+    // Optional: Check for system theme preference or use a default
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    setIsDarkMode(prefersDark);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,8 +70,12 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-gray-200">
-      <div className="container mx-auto px-4 py-10 bg-gray-800 rounded-lg shadow-md">
+    <div
+      className={`flex items-center justify-center min-h-screen ${isDarkMode ? "bg-gray-900 text-gray-200" : "bg-gray-100 text-gray-800"}`}
+    >
+      <div
+        className={`container mx-auto px-4 py-10 ${isDarkMode ? "bg-gray-800" : "bg-white"} rounded-lg shadow-md`}
+      >
         <h1 className="text-2xl font-semibold text-center">
           Reset Your Password
         </h1>
@@ -77,7 +88,7 @@ const ResetPasswordPage = () => {
               <label className="block text-sm font-medium">New Password</label>
               <input
                 type="password"
-                className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-gray-200 rounded"
+                className={`w-full px-4 py-2 border ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-gray-200"} text-gray-200 rounded`}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
@@ -91,7 +102,7 @@ const ResetPasswordPage = () => {
               </label>
               <input
                 type="password"
-                className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-gray-200 rounded"
+                className={`w-full px-4 py-2 border ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-gray-200"} text-gray-200 rounded`}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -104,7 +115,7 @@ const ResetPasswordPage = () => {
             <div className="mt-6">
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className={`w-full ${isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"} text-white px-4 py-2 rounded`}
                 disabled={loading}
               >
                 {loading ? "Resetting..." : "Reset Password"}
