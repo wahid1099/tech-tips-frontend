@@ -130,7 +130,7 @@ export const Navbar = () => {
                   key="dashboard"
                   onClick={() =>
                     handleNavigation(
-                      user?.role === "admin" ? "/admin" : "/profile"
+                      user?.role === "admin" ? "/adminDashboard" : "/profile"
                     )
                   }
                 >

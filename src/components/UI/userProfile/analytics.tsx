@@ -3,7 +3,7 @@ const Analytics = () => {
     <div>
       <h2>Analytics</h2>
       <p>View your followers and manage interactions.</p>
-      {/* Add your followers logic here */}
+      <p>Cooming soon.</p>
     </div>
   );
 };

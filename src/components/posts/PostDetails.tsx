@@ -158,7 +158,7 @@ const PostData = ({ post }: { post: TPost }) => {
                           if (user) {
                             handleFollow(post?.author?._id, "unfollow");
                           } else {
-                            window.location.href = `/login?redirect=/${post?._id}`;
+                            window.location.href = `/auth?redirect=/${post?._id}`;
                           }
                         }}
                       >
@@ -171,7 +171,7 @@ const PostData = ({ post }: { post: TPost }) => {
                           if (user) {
                             handleFollow(post?.author?._id, "follow");
                           } else {
-                            window.location.href = `/login?redirect=/${post?._id}`;
+                            window.location.href = `/auth?redirect=/${post?._id}`;
                           }
                         }}
                       >
@@ -227,7 +227,7 @@ const PostData = ({ post }: { post: TPost }) => {
                       ? "bg-blue-500 text-white"
                       : "text-blue-500 border-blue-500"
                   }`}
-                  href={user ? "#" : `/login?redirect=/${post?._id}`}
+                  href={user ? "#" : `/auth?redirect=/${post?._id}`}
                   size="sm"
                   variant="bordered"
                   onClick={(e) => {
@@ -250,7 +250,7 @@ const PostData = ({ post }: { post: TPost }) => {
                       ? "bg-red-500 text-white"
                       : "text-red-500 border-red-500"
                   }`}
-                  href={user ? "#" : `/login?redirect=/${post?._id}`}
+                  href={user ? "#" : `/atuh?redirect=/${post?._id}`}
                   size="sm"
                   variant="bordered"
                   onClick={(e) => {

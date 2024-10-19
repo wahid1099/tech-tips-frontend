@@ -1,4 +1,3 @@
-
 import { useUser } from "@/src/context/UserContext";
 
 const MakePayments = () => {
@@ -8,6 +7,7 @@ const MakePayments = () => {
     <div>
       <h2>Make Payments</h2>
       <p>Manage and make payments.</p>
+      <p>Cooming soon.</p>
       {/* Add your payment management logic here */}
     </div>
   );

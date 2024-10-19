@@ -38,7 +38,7 @@ export const useUserLogin = () => {
 
     mutationFn: async (userData) => await loginUser(userData),
     onSuccess: (data) => {
-      setUser(data); // Set the user data in the context after successful login
+      setUser(data);
       // UserLoading(false);
       toast.success("User logged in successfully", {
         duration: 1000,

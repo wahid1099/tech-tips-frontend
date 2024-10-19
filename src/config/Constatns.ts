@@ -1,9 +1,4 @@
-export const protectedRoutes = [
-  "/userDashboard",
-  "/userDashboard/:path*",
-  "/adminDashboard",
-  "/adminDashboard/:path*",
-];
+export const protectedRoutes = [/^\/adminDashboard(\/.*)?$/];
 
 export const categories = [
   { key: "Web", label: "Web" },

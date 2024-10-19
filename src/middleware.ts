@@ -4,11 +4,11 @@ import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/src/services/UserServices/AuthServices";
 
-const AuthRoutes = ["/login", "/register", "/forgot-password"];
+const AuthRoutes = ["/auth", "/forgot-password"];
 
 type Role = keyof typeof roleBasedRoutes;
 const roleBasedRoutes = {
-  user: [/^\/userDashboard/],
+  user: [/^\/profile/],
   admin: [/^\/adminDashboard/],
 };
 
@@ -40,8 +40,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     } else {
       // Redirect to user's default dashboard if unauthorized access
-      const redirectUrl =
-        userRole === "admin" ? "/adminDashboard" : "/userDashboard";
+      const redirectUrl = userRole === "admin" ? "/adminDashboard" : "/profile";
 
       return NextResponse.redirect(new URL(redirectUrl, request.url));
     }
@@ -52,10 +51,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/userDashboard",
-    "/userDashboard/:page*",
-    "/adminDashboard",
-    "/adminDashboard/:page*",
-  ],
+  matcher: ["/profile", "/adminDashboard", "/adminDashboard/:page*"],
 };
