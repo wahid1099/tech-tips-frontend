@@ -94,34 +94,6 @@ const PostData = ({ post }: { post: TPost }) => {
 
   return (
     <>
-      {isPremiumPost && (
-        <div className="bg-black/80 h-screen fixed inset-0 z-[999] backdrop-blur-md flex items-center justify-center">
-          <div className="bg-gray-900 border border-gray-700 rounded-lg shadow-2xl p-8 max-w-sm text-center">
-            <h2 className="text-4xl font-extrabold text-white mb-4">
-              Premium Content
-            </h2>
-            <p className="text-lg text-gray-400 mb-6">
-              This content is exclusive to premium users. Please upgrade to
-              access it.
-            </p>
-            <div className="flex items-center gap-3 justify-center">
-              <Button
-                className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300 rounded-md px-6 py-3 font-semibold shadow-md "
-                onClick={() => router.push("/become-member")}
-              >
-                Upgrade Now
-              </Button>
-              <Button
-                className="bg-gray-600 text-white hover:bg-gray-700 transition duration-300 rounded-md px-6 py-3 font-semibold"
-                onClick={() => router.back()}
-              >
-                Go Back
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card className="overflow-hidden p-4 dark:bg-gray-800">
           <CardHeader>
