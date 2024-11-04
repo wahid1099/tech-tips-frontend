@@ -5,6 +5,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import { FaCheckCircle, FaShareAlt } from "react-icons/fa";
 import {
   CalendarDays,
   BarChart2,
@@ -12,6 +13,15 @@ import {
   ThumbsUp,
   BadgeCheck,
 } from "lucide-react";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+} from "react-share";
+
 import {
   Card,
   CardHeader,
@@ -46,10 +56,14 @@ const PostData = ({ post }: { post: TPost }) => {
   const { mutate: createVote } = useVotePost();
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [content, setContent] = useState<string>("");
+  const [shareVisible, setShareVisible] = useState(false); // State to show/hide share buttons
 
+  const handleShareClick = () => {
+    setShareVisible(!shareVisible); // Toggle visibility of share buttons
+  };
   const { mutate: createFollow } = useToggleFollow();
   const router = useRouter();
-
+  const postUrl = `https://techtipshubwahid.netlify.app/${post._id}`; // Adjust to your website's URL
   const handleSubmitComment: SubmitHandler<FieldValues> = (data) => {
     const commentInfo = {
       postId: post._id,
@@ -79,7 +93,7 @@ const PostData = ({ post }: { post: TPost }) => {
     handleEditComment({ postId: post?._id, commentId, comment: { content } });
     setEditingCommentId(null);
   };
-  const handleFollow = (followingId: string, p0: string) => {
+  const handleFollow = (followingId: string) => {
     createFollow(followingId);
   };
   const handleVotes = (postId: string, action: string) => {
@@ -107,7 +121,7 @@ const PostData = ({ post }: { post: TPost }) => {
                   <h1 className="text-2xl font-semibold mb-2 md:mb-0 flex items-center">
                     {post?.author?.name}
                     {user?.isVerified && (
-                      <span className="ml-2 inline-flex items-center justify-center bg-blue-500 text-white font-bold text-xs rounded-full ">
+                      <span className="ml-2 inline-flex items-center justify-center bg-blue-500 text-white font-bold text-xs rounded-full">
                         <BadgeCheck />
                       </span>
                     )}
@@ -122,35 +136,26 @@ const PostData = ({ post }: { post: TPost }) => {
               </div>
               <div className="mt-1 ">
                 {user?._id !== post?.author?._id && (
-                  <>
-                    {post?.author?.followers?.includes(user?._id) ? (
-                      <button
-                        className="text-blue-600 text-xl font-semibold font-sans hover:underline duration-300"
-                        onClick={() => {
-                          if (user) {
-                            handleFollow(post?.author?._id, "unfollow");
-                          } else {
-                            window.location.href = `/auth?redirect=/${post?._id}`;
-                          }
-                        }}
-                      >
-                        Following
-                      </button>
-                    ) : (
-                      <button
-                        className="text-blue-500 text-xl font-semibold font-sans hover:underline duration-300"
-                        onClick={() => {
-                          if (user) {
-                            handleFollow(post?.author?._id, "follow");
-                          } else {
-                            window.location.href = `/auth?redirect=/${post?._id}`;
-                          }
-                        }}
-                      >
-                        Follow
-                      </button>
-                    )}
-                  </>
+                  <button
+                    className={`bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition-colors ${
+                      user?.following.includes(post?.author?._id)
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (user) {
+                        handleFollow(post?.author?._id); // Follow action
+                      } else {
+                        window.location.href = `/auth?redirect=/${post?._id}`; // Redirect if not logged in
+                      }
+                    }}
+                    disabled={user?.following.includes(post?.author?._id)} // Optionally disable the button if already following
+                  >
+                    {user?.following.includes(post?.author?._id)
+                      ? "Following"
+                      : "Follow"}{" "}
+                    {/* Change text based on following status */}
+                  </button>
                 )}
               </div>
             </div>
@@ -190,6 +195,29 @@ const PostData = ({ post }: { post: TPost }) => {
                   <BarChart2 className="w-4 h-4 mr-2" />
                   {post?.comments?.length || 0} Comments
                 </Button>
+
+                <button
+                  className="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-500"
+                  onClick={handleShareClick}
+                >
+                  <FaShareAlt className="mr-2" />
+                  Share
+                </button>
+
+                {/* Social Media Share Buttons */}
+                {shareVisible && (
+                  <div className="flex space-x-4 mt-4">
+                    <FacebookShareButton url={postUrl}>
+                      <FacebookIcon size={32} round />
+                    </FacebookShareButton>
+                    <TwitterShareButton url={postUrl}>
+                      <TwitterIcon size={32} round />
+                    </TwitterShareButton>
+                    <LinkedinShareButton url={postUrl}>
+                      <LinkedinIcon size={32} round />
+                    </LinkedinShareButton>
+                  </div>
+                )}
               </div>
               <div className="flex items-center space-x-2">
                 <Button
