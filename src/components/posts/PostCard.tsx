@@ -4,6 +4,7 @@ import {
   FaThumbsDown,
   FaComment,
   FaCheckCircle,
+  FaShareAlt,
 } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +15,15 @@ import { Button } from "@nextui-org/button";
 import { useVotePost } from "@/src/hooks/Post.hooks";
 import { toast } from "sonner";
 import { useToggleFollow } from "@/src/hooks/user.hook";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+} from "react-share";
+
 const PostCard = ({ post }: { post: TPost }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
@@ -22,7 +32,11 @@ const PostCard = ({ post }: { post: TPost }) => {
 
   // State to track loading
   const { user } = useUser();
-  // Check if the user has already upvoted or downvoted the post
+  const [shareVisible, setShareVisible] = useState(false); // State to show/hide share buttons
+
+  const handleShareClick = () => {
+    setShareVisible(!shareVisible); // Toggle visibility of share buttons
+  };
   const hasUpvoted =
     Array.isArray(post?.upVotes) && post?.upVotes.includes(user?._id || "");
   const hasDownvoted =
@@ -69,6 +83,7 @@ const PostCard = ({ post }: { post: TPost }) => {
   };
 
   const shouldBlur = post.isPremium && (!user || user.payments.length === 0);
+  const postUrl = `https://techtipshubwahid.netlify.app/${post._id}`; // Adjust to your website's URL
 
   return (
     <div className="relative flex justify-center my-4">
@@ -126,7 +141,6 @@ const PostCard = ({ post }: { post: TPost }) => {
             </button>
           )}
         </div>
-
         {/* Post Content */}
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -154,7 +168,6 @@ const PostCard = ({ post }: { post: TPost }) => {
             )}
           </div>
         </div>
-
         {/* Post Actions: Upvote, Downvote, Comment */}
         <div className="flex justify-between items-center mt-4">
           <div className="flex space-x-4">
@@ -178,6 +191,13 @@ const PostCard = ({ post }: { post: TPost }) => {
               <FaThumbsDown className="mr-2" />
               {post?.downVotes?.length || 0} Likes
             </button>
+            <button
+              className="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-500"
+              onClick={handleShareClick}
+            >
+              <FaShareAlt className="mr-2" />
+              Share
+            </button>
           </div>
           <Link
             href={`/${post._id}`}
@@ -187,6 +207,21 @@ const PostCard = ({ post }: { post: TPost }) => {
             {post.comments.length} Comments
           </Link>
         </div>
+
+        {/* Social Media Share Buttons */}
+        {shareVisible && (
+          <div className="flex space-x-4 mt-4">
+            <FacebookShareButton url={postUrl}>
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={postUrl}>
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <LinkedinShareButton url={postUrl}>
+              <LinkedinIcon size={32} round />
+            </LinkedinShareButton>
+          </div>
+        )}
 
         {/* Post Tags */}
         <div className="mt-3">
