@@ -18,6 +18,7 @@ interface IUserProviderValues {
   isLoading: boolean;
   setUser: (user: User | null) => void;
   isSetLoading: Dispatch<SetStateAction<boolean>>;
+  refetchUser: () => Promise<void>;
 }
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -35,12 +36,19 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const refetchUser = async () => {
+    isSetLoading(true);
+    await handleUser();
+  };
+
   useEffect(() => {
     handleUser(); // Fetch user on mount
   }, []); // Run only once on component mount
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading, isSetLoading }}>
+    <UserContext.Provider
+      value={{ user, setUser, isLoading, isSetLoading, refetchUser }}
+    >
       {children}
     </UserContext.Provider>
   );

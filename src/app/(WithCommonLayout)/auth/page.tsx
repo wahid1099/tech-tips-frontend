@@ -1,31 +1,24 @@
 "use client";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { CircularProgress } from "@nextui-org/react";
 
-import AuthTabs from "./authcomponent";
+import ModernAuth from "@/src/components/UI/ModernAuth";
 
 const AuthPage = () => {
-  const [value, setValue] = React.useState(0);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setValue((v) => (v >= 100 ? 0 : v + 10));
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
   return (
     <Suspense
       fallback={
-        <CircularProgress
-          aria-label="Loading..."
-          size="lg"
-          value={value}
-          color="warning"
-          showValueLabel={true}
-        />
+        <div className="flex items-center justify-center min-h-screen">
+          <CircularProgress
+            aria-label="Loading..."
+            size="lg"
+            color="primary"
+            showValueLabel={true}
+          />
+        </div>
       }
     >
-      <AuthTabs />
+      <ModernAuth />
     </Suspense>
   );
 };

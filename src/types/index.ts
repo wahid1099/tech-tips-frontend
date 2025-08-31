@@ -159,3 +159,52 @@ export interface PostResponse {
   data: TPost[];
   pagination: Pagination;
 }
+
+// Chat related types
+export interface TMessage {
+  _id: string;
+  content: string;
+  sender: TUser;
+  chatId: string;
+  messageType: "text" | "image" | "file";
+  fileUrl?: string;
+  fileName?: string;
+  isEdited: boolean;
+  readBy: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TChat {
+  _id: string;
+  name?: string; // For group chats
+  description?: string; // For group chats
+  type: "direct" | "group";
+  participants: TUser[];
+  admins?: string[]; // For group chats
+  lastMessage?: TMessage;
+  unreadCount: number;
+  isActive: boolean;
+  createdBy?: string; // For group chats
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TChatList {
+  chats: TChat[];
+  totalChats: number;
+  hasMore: boolean;
+}
+
+export interface TCreateGroup {
+  name: string;
+  description?: string;
+  participants: string[];
+}
+
+export interface TUpdateGroup {
+  name?: string;
+  description?: string;
+  participants?: string[];
+  admins?: string[];
+}

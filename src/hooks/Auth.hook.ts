@@ -31,21 +31,29 @@ export const useUserRegistration = () => {
 // login
 
 export const useUserLogin = () => {
-  const { setUser, isSetLoading: UserLoading } = useUser(); // Import and use setUser
+  const { setUser, refetchUser, isSetLoading: UserLoading } = useUser();
 
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["USER_LOGIN"],
-
     mutationFn: async (userData) => await loginUser(userData),
-    onSuccess: (data) => {
-      setUser(data);
-      // UserLoading(false);
-      toast.success("User logged in successfully", {
-        duration: 1000,
-        position: "top-center",
-      });
+    onSuccess: async (data) => {
+      try {
+        // Immediately refetch user data from server to get complete user info
+        await refetchUser();
+        toast.success("User logged in successfully", {
+          duration: 1000,
+          position: "top-center",
+        });
+      } catch (error) {
+        console.error("Error refetching user after login:", error);
+        // Fallback: set user from login response if refetch fails
+        if (data?.data) {
+          setUser(data.data);
+        }
+      }
     },
     onError: (error) => {
+      UserLoading(false);
       toast.error(error.message, {
         duration: 1000,
         position: "top-center",

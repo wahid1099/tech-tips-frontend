@@ -21,9 +21,8 @@ const LoginComponent = () => {
   const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
   const { isSetLoading: UserLoading } = useUser();
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     handleUserLogin(data);
-    UserLoading(true);
   };
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const LoginComponent = () => {
         router.push("/");
       }
     }
-  }, [isPending, isSuccess]);
+  }, [isPending, isSuccess, redirect, router]);
 
   return (
     <>
@@ -55,7 +54,7 @@ const LoginComponent = () => {
             </p>
           </div>
 
-          <div className="flex border flex-col items-center justify-center w-full max-w-lg bg-[#F9F9F9] dark:bg-[#1A1A1A] mx-auto mt-5 p-6 rounded-lg mb-10">
+          <div className="flex flex-col items-center justify-center w-full max-w-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg mx-auto mt-5 p-8 rounded-xl shadow-2xl border-0 mb-10">
             <CustomForm
               resolver={zodResolver(loginValidationSchema)}
               onSubmit={onSubmit}

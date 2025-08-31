@@ -1,6 +1,6 @@
 import React from "react";
 
-import PostData from "@/src/components/posts/PostDetails";
+import ModernPostDetails from "@/src/components/posts/ModernPostDetails";
 import { getPostById } from "@/src/services/PostServices/PostServices";
 
 interface PostProps {
@@ -8,14 +8,11 @@ interface PostProps {
     postId: string;
   };
 }
+
 const PostDetails = async ({ params: { postId } }: PostProps) => {
   const { data } = await getPostById(postId);
 
-  return (
-    <>
-      <PostData post={data} />
-    </>
-  );
+  return <ModernPostDetails post={data} />;
 };
 
 export default PostDetails;

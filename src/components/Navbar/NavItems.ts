@@ -7,6 +7,10 @@ export const NavbarItems = {
       href: "/",
     },
     {
+      label: "Chat",
+      href: "/chat",
+    },
+    {
       label: "Contact Us",
       href: "/contact",
     },
@@ -19,6 +23,10 @@ export const NavbarItems = {
     {
       label: "News Feed",
       href: "/",
+    },
+    {
+      label: "Chat",
+      href: "/chat",
     },
     {
       label: "Contact Us",

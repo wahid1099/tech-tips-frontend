@@ -8,12 +8,13 @@ interface IProps extends TInput {
   type?: string;
   radius?: "none" | "sm" | "md" | "lg" | "xl";
   label: ReactNode;
+  minRows?: number;
 }
 
 export const TechTextArea = ({
   name,
   label,
-
+  minRows = 2,
   variant = "bordered",
 }: IProps) => {
   const {
@@ -28,7 +29,7 @@ export const TechTextArea = ({
       errorMessage={errors[name] ? (errors[name]?.message as string) : ""}
       isInvalid={!!errors[name]}
       label={label}
-      minRows={2}
+      minRows={minRows}
       radius="none"
       value={currentValue || ""}
       variant={variant}

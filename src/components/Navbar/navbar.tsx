@@ -27,6 +27,7 @@ import { useUser } from "@/src/context/UserContext";
 import { protectedRoutes } from "@/src/config/Constatns";
 import { NavbarItems } from "@/src/components/Navbar/NavItems";
 import { ThemeSwitch } from "@/src/components/Themeswticher";
+import ChatNotification from "@/src/components/chat/ChatNotification";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -86,10 +87,13 @@ export const Navbar = () => {
             <NextLink
               className={clsx(
                 linkStyles({ color: "foreground" }),
-                "data-[active=true]:text-primary data-[active=true]:font-medium hover:text-pink-500 transition-colors"
+                "data-[active=true]:text-primary data-[active=true]:font-medium hover:text-pink-500 transition-colors flex items-center gap-2"
               )}
               href={item.href}
             >
+              {item.label === "Chat" && user?.email ? (
+                <ChatNotification />
+              ) : null}
               {item.label}
             </NextLink>
           </NavbarItem>

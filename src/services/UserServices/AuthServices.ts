@@ -27,7 +27,7 @@ export const loginUser = async (userData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response.data.message || "Failed to login user");
+    throw new Error(error.response?.data?.message || "Failed to login user");
   }
 };
 

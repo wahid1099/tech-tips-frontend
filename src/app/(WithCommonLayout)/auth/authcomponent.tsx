@@ -94,7 +94,6 @@ const AuthTabs = () => {
   };
 
   const onSubmitLogin: SubmitHandler<FieldValues> = (data) => {
-    UserLoading(true); // Start loading state for user context if necessary
     handleUserLogin(data);
   };
 
